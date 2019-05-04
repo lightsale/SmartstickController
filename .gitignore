@@ -1,0 +1,9 @@
+Release/*
+Build/*
+Debug/*
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+SmartstickControllerAnalysis*
+__vm/*
