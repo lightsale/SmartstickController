@@ -15,6 +15,7 @@
 #include <stdint.h>
 
 struct Playlist {
+    const uint8_t* color;
     const bool fixedDuration;
     const uint16_t fadeTime;
     const uint8_t num_images;

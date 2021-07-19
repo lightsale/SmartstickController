@@ -46,35 +46,15 @@ void PlaylistMode::fillPlaylist() {
 }
 
 void PlaylistMode::fillMenu() {
-    uint8_t renderIndex = 0;
-    uint8_t pixelIndex;
-    for (pixelIndex = 0; pixelIndex < 4; pixelIndex++) {
-        leds[pixelIndex] = CRGB::White;
-        if (playlistIndex == renderIndex) {
-            leds[pixelIndex] = leds[pixelIndex].fadeToBlackBy(sin8(millis() / 4));
-        }
-    }
-    for (uint8_t i = 0; i < 4; i++) {
-        renderIndex++;
-        uint8_t stop = pixelIndex + 5;
+    uint8_t pixelIndex = 0;
+    for (uint8_t i = 0; i < num_playlists; i++) {
+        uint8_t remainder = i < (NUM_LEDS% num_playlists) ? 1 : 0;
+        uint8_t stop = pixelIndex + (NUM_LEDS / num_playlists) + remainder;
+        Playlist pl = playlists[i];
         for (pixelIndex; pixelIndex < stop; pixelIndex++) {
-            CRGB color;
-            switch (i) {
-            case 0:
-                color = CRGB::Red;
-                break;
-            case 1:
-                color = CRGB::Yellow;
-                break;
-            case 2:
-                color = CRGB::Green;
-                break;
-            case 3:
-                color = CRGB::Blue;
-                break;
-            }
+            CRGB color = CRGB(pl.color[0], pl.color[1], pl.color[2]);
             leds[pixelIndex] = color;
-            if (playlistIndex == renderIndex) {
+            if (playlistIndex == i) {
                 leds[pixelIndex] = color.fadeToBlackBy(sin8(millis() / 4));
             }
         }
