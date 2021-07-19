@@ -14,7 +14,7 @@
 
 //Pin definitions
 #define MOSFET_GATE_PIN 22
-#define LED_DATA_PIN 1
+#define LED_DATA_PIN 0
 #define SWITCH_PIN 2
 #define CLK_PIN 3
 
@@ -23,8 +23,8 @@
 //Rev 3
 //#define BATTERY_VOLTAGE_PIN 9
 
-#define STBC_CHG_PIN 0
-#define STBC_PWR_PIN 23
+#define STBC_CHG_PIN 23
+#define STBC_PWR_PIN 1
 
 //Strip settings
 #define STARTING_BRIGHTNESS 24
