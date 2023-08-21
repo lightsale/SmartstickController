@@ -55,8 +55,6 @@ void BatteryMode::fillLEDs() {
 }
 
 BatteryMode::BatteryMode() {
-    analogReference(INTERNAL1V2);
-    analogReadAveraging(4);
     analogReadResolution(12);
 }
 

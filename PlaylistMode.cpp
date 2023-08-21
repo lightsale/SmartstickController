@@ -13,15 +13,21 @@
 
 #include "PlaylistMode.h"
 
+void PlaylistMode::NextImage()
+{
+    Playlist playlist = playlists[playlistIndex];
+    lastChange = millis();
+    imageIndex = (imageIndex + 1) % playlist.num_images;
+    frameIndex = nextFrameIndex;
+    nextFrameIndex = 0;
+}
+
 void PlaylistMode::fillPlaylist() {
     Playlist playlist = playlists[playlistIndex];
     uint32_t duration = playlist.fixedDuration ? playlist.durations[0] : playlist.durations[imageIndex];
     uint32_t elapsed = millis() - lastChange;
     if (elapsed > duration && playing) {
-        lastChange = millis();
-        imageIndex = (imageIndex + 1) % playlist.num_images;
-        frameIndex = nextFrameIndex;
-        nextFrameIndex = 0;
+        NextImage();
     }
     ImageData image = image_patterns[playlist.images[imageIndex]];
     /*lerp between current image and next image*/
@@ -83,8 +89,8 @@ RequestedAction PlaylistMode::handleInput(byte input) {
             playlistIndex = (playlistIndex + 1) % num_playlists;
         }
         else {
-            // During playback, single click to stop/start playback
-            playing = !playing;
+            // During playback, single click cycle through images
+            NextImage();
         }
         break;
     case doubleclick:
@@ -94,10 +100,8 @@ RequestedAction PlaylistMode::handleInput(byte input) {
             inMenu = false;
         }
         else {
-            // During playback, doubleclick to reset to head
-            imageIndex = 0;
-            frameIndex = 0;
-            nextFrameIndex = 0;
+            // During playback, doubleclick to start/stop playback
+            playing = !playing;
         }
         break;
     }

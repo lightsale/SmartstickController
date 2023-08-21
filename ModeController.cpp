@@ -27,11 +27,9 @@
 
 void ModeController::SetupModes(CRGB* leds) {
  //BEGIN_MODE_INSTANTIATION
-    modeList.push_back(&batteryMode);
     modeList.push_back(&playlistMode);
     modeList.push_back(&imageMode);
     modeList.push_back(&demoReelMode);
-    modeList.push_back(&flashlightMode);
     /*modeList.push_back(&serialMonitorMode);*/
     modeList.push_back(&brightnessMode);
 

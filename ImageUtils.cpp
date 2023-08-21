@@ -13,34 +13,36 @@
 
 #include "ImageUtils.h"
 
+const int NUM_STICK_LEDS = 24;
 void ImageUtils::fillTruecolorPixels(CRGB* leds, ImageData img, uint16_t frame) {
-    int frame_offset = NUM_LEDS * 3 * frame;
+    int frame_offset = NUM_STICK_LEDS * 3 * frame;
     for (uint8_t i = 0; i < NUM_LEDS; i++) {
-        byte r = img.pixels[frame_offset + 3 * i + 0];
-        byte g = img.pixels[frame_offset + 3 * i + 1];
-        byte b = img.pixels[frame_offset + 3 * i + 2];
+        uint16_t scaled_i = i % NUM_STICK_LEDS;
+        byte r = img.pixels[frame_offset + 3 * scaled_i + 0];
+        byte g = img.pixels[frame_offset + 3 * scaled_i + 1];
+        byte b = img.pixels[frame_offset + 3 * scaled_i + 2];
         leds[NUM_LEDS - 1 - i] = CRGB(r, g, b);
     }
 }
 
 void ImageUtils::fillTruecolorPixels(CRGB* leds, ImageData img, uint16_t frame, fract8 interp) {
-    int frame_offset = NUM_LEDS * 3 * frame;
+    int frame_offset = NUM_STICK_LEDS * 3 * frame;
     for (uint8_t i = 0; i < NUM_LEDS; i++) {
-        byte r = img.pixels[frame_offset + 3 * i + 0];
-        byte g = img.pixels[frame_offset + 3 * i + 1];
-        byte b = img.pixels[frame_offset + 3 * i + 2];
+        uint16_t scaled_i = i % NUM_STICK_LEDS;
+        byte r = img.pixels[frame_offset + 3 * scaled_i + 0];
+        byte g = img.pixels[frame_offset + 3 * scaled_i + 1];
+        byte b = img.pixels[frame_offset + 3 * scaled_i + 2];
         leds[NUM_LEDS - 1 - i] = leds[NUM_LEDS - 1 - i].lerp8(CRGB(r, g, b), interp);
     }
 }
 
 void ImageUtils::fillPalettizedPixels(CRGB* leds, ImageData img, uint16_t frame) {
-    int frame_offset = (NUM_LEDS * img.bitdepth * frame) / 8;
+    int frame_offset = (NUM_STICK_LEDS * img.bitdepth * frame) / 8;
     uint8_t bytes_read = 0;
     uint8_t buffer_index = 0;
     uint8_t buffer = img.pixels[frame_offset];
     uint8_t paletteIndex = 0;
-    for (uint8_t i = 0; i < NUM_LEDS; i++) {
-
+    for (uint8_t i = 0; i < NUM_STICK_LEDS; i++) {
         for (uint8_t j = 0; j < img.bitdepth; j++) {
             if (buffer & (1 << buffer_index))
                 paletteIndex |= (1 << j);
@@ -54,7 +56,12 @@ void ImageUtils::fillPalettizedPixels(CRGB* leds, ImageData img, uint16_t frame)
         uint8_t r = img.palette[3 * paletteIndex + 0];
         uint8_t g = img.palette[3 * paletteIndex + 1];
         uint8_t b = img.palette[3 * paletteIndex + 2];
-        leds[NUM_LEDS - 1 - i] = CRGB(r, g, b);
+        for (uint8_t k = 0; k < 4; k++) {
+            if (NUM_LEDS - 1 - ((k *NUM_STICK_LEDS) + i) >= 0) {
+                leds[NUM_LEDS - 1 - ((k * NUM_STICK_LEDS) + i)] = CRGB(r, g, b);
+            }
+        }
+        //leds[NUM_LEDS - 1 - i] = CRGB(r, g, b);
         paletteIndex = 0;
     }
 }
@@ -67,7 +74,7 @@ void ImageUtils::fillPalettizedPixels(CRGB* leds, ImageData img, uint16_t frame,
     uint8_t buffer_index = 0;
     uint8_t buffer = img.pixels[frame_offset];
     uint8_t paletteIndex = 0;
-    for (uint8_t i = 0; i < NUM_LEDS; i++) {
+    for (uint8_t i = 0; i < NUM_STICK_LEDS; i++) {
 
         // Loop over bit depth, reading bits out of a byte buffer.
         // When the end of the byte is reached, read the next byte and reset
@@ -87,7 +94,12 @@ void ImageUtils::fillPalettizedPixels(CRGB* leds, ImageData img, uint16_t frame,
         uint8_t r = img.palette[3 * paletteIndex + 0];
         uint8_t g = img.palette[3 * paletteIndex + 1];
         uint8_t b = img.palette[3 * paletteIndex + 2];
-        leds[NUM_LEDS - 1 - i] = leds[NUM_LEDS - 1 - i].lerp8(CRGB(r, g, b), interp);
+        for (uint8_t k = 0; k < 4; k++) {
+            if (NUM_LEDS - 1 - ((k * NUM_STICK_LEDS) + i) >= 0) {
+                leds[NUM_LEDS - 1 - ((k * NUM_STICK_LEDS) + i)] = leds[NUM_LEDS - 1 - ((k * NUM_STICK_LEDS) + i)].lerp8(CRGB(r, g, b), interp);
+            }
+        }
+        //leds[NUM_LEDS - 1 - i] = leds[NUM_LEDS - 1 - i].lerp8(CRGB(r, g, b), interp);
         paletteIndex = 0;
     }
 }

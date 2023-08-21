@@ -31,6 +31,7 @@ private:
     uint16_t imageIndex;
     uint16_t frameIndex;
     uint16_t nextFrameIndex;
+    void NextImage();
     void fillPlaylist();
     void fillMenu();
 public:

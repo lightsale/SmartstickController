@@ -45,7 +45,6 @@ CommandInterface::CommandInterface() {
 void CommandInterface::Respond(const char* msg) {
     Serial.println(msg);
     Serial.flush();
-    Serial.send_now();
     for (uint8_t i = 0; i < strlen(msg); i++) {
         serialMonitorMode.setOutputByte(msg[i]);
     }

@@ -14,9 +14,9 @@
 
 //Pin definitions
 #define MOSFET_GATE_PIN 22
-#define LED_DATA_PIN 0
-#define SWITCH_PIN 2
-#define CLK_PIN 3
+#define LED_CLK_PIN 14
+#define LED_DATA_PIN 15
+#define SWITCH_PIN 32
 
 //Rev 5
 #define BATTERY_VOLTAGE_PIN 10
@@ -31,8 +31,8 @@
 #define FRAMES_PER_SECOND 240
 
 //LED parameters
-#define NUM_LEDS 24
-#define LED_TYPE APA102
+#define NUM_LEDS 75
+#define LED_TYPE ESPIChipsets::SK9822
 #define COLOR_ORDER BGR
 
 #if defined(ARDUINO) && ARDUINO >= 100
